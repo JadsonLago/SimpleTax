@@ -25,10 +25,12 @@ class ServiceTax
     }
 
     // Métodos ICMS Próprio
-    public static function icmsNormal($valor, $percentual)
+    public function icmsNormal():float
     {   
-        $icmsNormal = round(($valor*$percentual)/100,2);
-        return (float) $icmsNormal;
+        if ($this->percentual <= 0 || $this->valor <= 0) {
+            throw new Exception("Percentual e valor devem ser maiores que zero.");
+        }
+        return round(($this->valor * $this->percentual) / 100,2);
     }
 
   

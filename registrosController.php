@@ -24,13 +24,19 @@ try {
             $registro->setValor($_POST['valor']);
 
             $imposto = new ServiceTax();
-            $valor = $_POST['valor'];
-
-            $imposto ->icmsNormal( $imposto->setValor((float)$_POST['valor']), $imposto->setPercentual((float)$_POST['percentual']));
-            $valor_fatura =4515.2;
-            $registro->setImposto($imposto);
+            $valor = (float)$_POST['valor'];
+            // Configure os valores
+            $imposto->setValor($valor);
+            $imposto->setPercentual((float)$_POST['percentual']);
+            // Calcule o valor do imposto
+            $valorImposto = $imposto->icmsNormal();
+    
+            // Calcule o valor total da fatura
+            $valor_fatura = $valor + $valorImposto;
+            
+            $registro->setImposto($valorImposto); // Armazene o valor numérico
             $registro->setValorFatura($valor_fatura);
-            var_dump($imposto);
+            
                   
             $erros = $registro->validar();
 

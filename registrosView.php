@@ -4,6 +4,7 @@ require_once 'Registro.php';
 
 $registros = Registro::listarTodos();
 $total = Registro::listarTotalValor();
+$total_imposto = Registro::listarTotalImposto();
 
 
 $mensagem = $_SESSION['mensagem'] ?? '';
@@ -31,8 +32,8 @@ unset($_SESSION['tipo_mensagem']);
         <?php endif; ?>
         
         <a href="registrosForm.php" class="btn btn-success mb-3">Novo Registro</a>
-        <h1><?=print_r($total);?></h1>
-
+        <h1>Total: <?=print_r($total);?></h1>
+        <h1>Total Imposto: <?=print_r($total_imposto);?></h1>    
         
         <table class="table table-striped">
             <thead>
@@ -57,8 +58,8 @@ unset($_SESSION['tipo_mensagem']);
                         <td><?= htmlspecialchars($registro['quantidade']) ?></td>
                         <td><?= htmlspecialchars($registro['percentual']) ?>%</td>
                         <td><?= htmlspecialchars($registro['valor']) ?></td>
-                        <td><?= htmlspecialchars($imposto = round(($registro['valor']*$registro['percentual'])/100),2) ?></td>
-                        <td><?= htmlspecialchars($registro['valor']+$imposto) ?></td>
+                        <td><?= htmlspecialchars($registro['imposto'])?></td>
+                        <td><?= htmlspecialchars($registro['valor_fatura']) ?></td>
                         <td>
                             <a href="registrosForm.php?id=<?= $registro['id'] ?>" class="btn btn-sm btn-primary">Editar</a>
                             <a href="registrosController.php?acao=excluir&id=<?= $registro['id'] ?>" 
@@ -69,6 +70,10 @@ unset($_SESSION['tipo_mensagem']);
                 <?php endforeach; ?>
             </tbody>
         </table>
+       <?php
+        $DateAndTime = date('d/m/Y', time());  
+        echo "Consulta em: $DateAndTime.";
+        ?>
     </div>
 </body>
 </html>

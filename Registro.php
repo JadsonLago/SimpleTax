@@ -47,7 +47,6 @@ class Registro
     {
         $this->quantidade = $quantidade;
     }
-
     public function getPercentual()
     {
         return $this->percentual;
@@ -56,8 +55,7 @@ class Registro
     {
         $this->percentual = $percentual;
     }
-
-     public function getValor()
+    public function getValor()
     {
         return $this->valor;
     }
@@ -65,7 +63,6 @@ class Registro
     {
         $this->valor = $valor;
     }
-
     public function getImposto()
     {
         return $this->imposto;
@@ -103,6 +100,16 @@ class Registro
         return (float)$resultado['valor_total']; //(float)$resultado['valor_total'] para garantir tipo numérico
     }
 
+    public static function listarTotalImposto(): float
+    {   
+        $sql = "SELECT SUM(imposto) as total_imposto from registros";
+        $stmt = Conexao::getConexao()->prepare($sql);
+        $stmt->execute();
+        // Retorna apenas o valor numérico (sem o array)
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (float)$resultado['total_imposto']; //(float)$resultado['valor_total'] para garantir tipo numérico
+    }
+
     public function salvar()
     {
         if (empty($this->id)) {
@@ -126,7 +133,7 @@ class Registro
         $stmt->bindValue(':quantidade', $this->quantidade);
         $stmt->bindValue(':percentual', $this->percentual);       
         $stmt->bindValue(':valor', $this->valor);
-        $stmt->bindValue(':imposto', (float)$this->imposto);
+        $stmt->bindValue(':imposto', (float)$this->imposto);        
         $stmt->bindValue(':valor_fatura', $this->valor_fatura);
 
         if (!empty($this->id)) {
